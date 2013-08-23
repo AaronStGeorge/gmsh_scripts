@@ -1,7 +1,7 @@
 import dolfin as dolf
 import pylab as p
 import subprocess as s
-import sys
+import sys, os
 
 def pos_from_xml(mesh,results):
     
@@ -38,6 +38,7 @@ def pos_from_xml(mesh,results):
     output.close()
     print "please click on post processing view and hit save"
     s.call(['gmsh','temp.geo'])
+    os.remove('temp.geo')
 
 def xml_to_gmsh(mesh,results=None):
     
@@ -166,7 +167,7 @@ def hess_pos(mesh,results):
     output.write( "Background Mesh View[0]; \n")
     output.write( "Field[1].CropNegativeValues = 0; \n")
     output.write( "Field[2] = MaxEigenHessian; \n")
-    output.write( "Field[2].Delta = 0.001; \n")
+    output.write( "Field[2].Delta = 0.0001; \n")
     output.write( "Field[3] = MathEval; \n")
     output.write( "Field[3].F = \"abs(F2) + 1\"; \n")
     output.write( "Field[4] = MathEval; \n")
@@ -176,7 +177,7 @@ def hess_pos(mesh,results):
     # run .geo file
     # this badly needs to be removed... there must be some way create and save a
     #   view from a .geo file
-    print "sorry to do this... please hit \"m\", then in the mesh pane hit define>size_fields. A window should pop choose from the list the last MathEval field. Then in the lower left hit view then create new view. This will take a few minutes. Once it is done in the post-processing pane there will be a new view click on this and select \"save as\" copy paste \"log_abs_MaxEigenHessian_plus_one.pos\" (without the quotes) into the save as dialog box, then hit save."
+    print "sorry to do this... please hit \"m\", then in the mesh pane hit define>size_fields. A window should pop choose from the list the last MathEval field. Then in the lower left hit view then create new view. This will take a few minutes. Once it is done in the post-processing pane there will be a new view click on this and select \"save as\" copy paste \"Thresh_on_log_abs_MaxEigenHessian_plus_one.pos \" (without the quotes) into the save as dialog box, then hit save."
     s.call(["gmsh","create_hess_pos.geo"])
 
 
