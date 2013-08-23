@@ -1,8 +1,8 @@
 from dolfin import *
 import pylab as p
 
-mesh = '../../../meshes/mesh.xml'
-ub   = '../../../meshes/ubmag.xml'
+mesh = '../data/mesh.xml'
+ub   = '../data/ubmag.xml'
 
 mesh = Mesh(mesh)
 
@@ -40,8 +40,9 @@ Hyy_a = project(Hyy,V).vector().array()
 
 # Find the |dominant eigenvalue of the Hessian|
 m = p.array([Hxx_a,Hxy_a,Hxy_a,Hyy_a])
-m = p.array( [max( abs( p.eig( m[:,i].reshape((2,2)))[0] )) for i in
-range(len(Hxx_a))] )
+m = p.array( [max( abs( p.eig( m[:,i].reshape((2,2)))[0] )) for i in \
+        range(len(Hxx_a))] )
+m = p.log(m)
 
 # Read into function space
 H_lambda = Function(V)
